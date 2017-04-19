@@ -2,7 +2,7 @@
 
 I found *{{ users | length }}* alumni from *{{ company }}*. {% if is_hiring %} They're hiring! {% endif %}
 
-{% for user in users %}
+{% for user in users -%}
 {{ user.first_name }} {{ user.last_name }} (<@{{ user.slack_id }}>)
 {% endfor %}
 

@@ -2,7 +2,7 @@
 
 These people have listed job opportunities at *{{ company }}*
 
-{% for user in users %}
+{% for user in users -%}
 {{ user.first_name }} {{ user.last_name }} (<@{{ user.slack_id }}>) {% if user.is_hiring %} for {{ user.hiring_for }} {% endif %}
 {% endfor %}
 
