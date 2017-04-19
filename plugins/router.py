@@ -1,19 +1,38 @@
+from jinja2 import Template
 from rtmbot.core import Plugin
 
-def list_companies():
-    print 'list companies'
+from model import database
+
+from pprint import pprint
+
+def _render_template(template_id, **kwargs):
+    with open('templates/{}.slack'.format(template_id)) as f:
+        template = Template(''.join(f.readlines()))
+
+    return template.render(**kwargs)
 
 
 def whos_hiring():
-    print 'whos hiring'
+    companies = database.hiring_companies()
+    return _render_template('whos_hiring', companies=companies)
 
 
 def whos_hiring_at_company(company_name):
-    print 'whos hiring at {}'.format(company_name)
+    users = database.company_alumns(company_name, filter_hiring=True)
+    return _render_template('whos_hiring_at_company', company=company_name, users=users)
 
 
 def alumni_at_company(company_name):
-    print 'alumni at {}'.format(company_name)
+    users = database.company_alumns(company_name, filter_hiring=False)
+    is_hiring = any(u['is_hiring'] for u in users)
+    print users
+
+    return _render_template(
+        'alumni_at_company',
+        company=company_name,
+        users=users,
+        is_hiring=is_hiring
+    )
 
 
 def match(template, text):
@@ -39,7 +58,6 @@ def match(template, text):
 
 class RoutingPlugin(Plugin):
     routes = {
-        'list companies': list_companies,
         'alumni at {company_name}': alumni_at_company,
         'whos hiring at {company_name}': whos_hiring_at_company,
         'whos hiring': whos_hiring,
@@ -57,7 +75,10 @@ class RoutingPlugin(Plugin):
         for trigger, func in self.routes.iteritems():
             matches, vars = match(trigger, text)
             if matches:
-                func(**vars)
+                response = func(**vars)
+                if response:
+                    self.outputs.append([data['channel'], response])
+
                 break
         else:
             print 'i dont know what to do'

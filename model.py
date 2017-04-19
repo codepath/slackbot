@@ -29,6 +29,9 @@ class Model:
 
         return alumns if not filter_hiring else filter(lambda x: x['is_hiring'], alumns)
 
+
+database = Model()
+
 if __name__ == "__main__":
     m = Model()
     # pprint(m.hiring_companies())

@@ -1,0 +1,7 @@
+I found *{{ companies | length }}* companies hiring CodePath alumni
+
+{% for company, positions in companies.iteritems() %}
+{{ company }} - {{ ', '.join(positions) }}
+{% endfor %}
+
+To see who's hiring from one of these companies, just say: _who's hiring at [company]_

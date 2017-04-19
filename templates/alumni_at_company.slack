@@ -1,0 +1,17 @@
+{% if users | length %}
+
+I found *{{ users | length }}* alumni from *{{ company }}*. {% if is_hiring %} They're hiring! {% endif %}
+
+{% for user in users %}
+{{ user.first_name }} {{ user.last_name }} (<@{{ user.slack_id }}>)
+{% endfor %}
+
+{% if is_hiring %}
+To see who's hiring, just say: _whos hiring at {{ company }}_
+{% endif %}
+
+{% else %}
+
+I couldn't find alumni that work at *{{ company }}*
+
+{% endif %}
