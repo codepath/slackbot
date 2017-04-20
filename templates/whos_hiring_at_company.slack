@@ -3,7 +3,7 @@
 These people have listed job opportunities at *{{ company }}*
 
 {% for user in users -%}
-{{ user.first_name }} {{ user.last_name }} (<@{{ user.slack_id }}>) {% if user.is_hiring %} for {{ user.hiring_for }} {% endif %}
+    {{ loop.index }}.  {{ user.first_name }} {{ user.last_name }} (<@{{ user.slack_id }}>) {% if user.is_hiring %} for {{ user.hiring_for }} {% endif %}
 {% endfor %}
 
 Feel free to direct message any of these alumni to find out more about the position!
