@@ -11,21 +11,17 @@ def _render_template(template_id, **kwargs):
 
     return template.render(**kwargs)
 
-
 def whos_hiring():
     companies = database.hiring_companies()
     return _render_template('whos_hiring', companies=companies)
-
 
 def whos_hiring_at_company(company_name):
     users = database.company_alumns(company_name, filter_hiring=True)
     return _render_template('whos_hiring_at_company', company=company_name, users=users)
 
-
 def alumni_at_company(company_name):
     users = database.company_alumns(company_name, filter_hiring=False)
     is_hiring = any(u['is_hiring'] for u in users)
-    print users
 
     return _render_template(
         'alumni_at_company',
@@ -34,6 +30,8 @@ def alumni_at_company(company_name):
         is_hiring=is_hiring
     )
 
+def help_menu():
+    return _render_template('help')
 
 def match(template, text):
     # returns a tuple of (bool, dict) where the first value is
@@ -55,30 +53,36 @@ def match(template, text):
 
     return True, vars
 
-
 class RoutingPlugin(Plugin):
     routes = {
         'alumni at {company_name}': alumni_at_company,
         'whos hiring at {company_name}': whos_hiring_at_company,
         'whos hiring': whos_hiring,
+        'hi': help_menu,
+        'help': help_menu
     }
 
     def process_message(self, data):
         # TODO: do we want to support edits? These come in as a diff format
         # TODO: some sort of warmup period to ignore initial messages in mailbox?
-        print data
         text = data.get('text')
         if not text:
             return
 
+        valid_input = False
         text = text.strip().lower()
         for trigger, func in self.routes.iteritems():
             matches, vars = match(trigger, text)
             if matches:
                 response = func(**vars)
                 if response:
+                    print response
+                    valid_input = True
                     self.outputs.append([data['channel'], response])
 
                 break
         else:
-            print 'i dont know what to do'
+            print "Input not matched"
+
+        if not valid_input:
+            self.outputs.append([data['channel'], help_menu()])
