@@ -1,7 +1,7 @@
 from pybot import robot
 
-from fred.model import database
-from fred.utils import render_template
+from bot.model import database
+from bot.utils import render_template
 
 
 @robot.hear(r"help")
