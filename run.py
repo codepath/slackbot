@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from os import environ as env
 
 from pybot import robot

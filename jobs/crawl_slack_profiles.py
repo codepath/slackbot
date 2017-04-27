@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import json
 from datetime import datetime
 from os import environ as env
@@ -98,4 +100,10 @@ if __name__ == '__main__':
         profiles.append(profile)
         sleep(1)
 
-    print json.dumps(profiles)
+    file_handle = open('profile_data.json', 'w')
+    if file_handle:
+        file_handle.write(json.dumps(profiles))
+        file_handle.close()
+        print "Profile data saved to file"
+    else:
+        print "Invalid file handle"

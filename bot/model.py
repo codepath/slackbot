@@ -4,7 +4,7 @@ from pprint import pprint
 class Model:
     def __init__(self):
         self.profiles = []
-        with open('data.json') as data_file:
+        with open('profile_data.json') as data_file:
             self.profiles = json.load(data_file)
 
     def hiring_companies(self):
