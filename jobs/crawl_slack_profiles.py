@@ -3,6 +3,7 @@
 import json
 from datetime import datetime
 from os import environ as env
+from os import path, sep
 from sys import exit
 from time import sleep
 
@@ -10,28 +11,22 @@ from slackclient import SlackClient
 
 slack = SlackClient(env['SLACK_API_TOKEN'])
 
-
 def error(message):
     print "error: {}".format(message)
-
 
 def fatal(message):
     error(message)
     exit(1)
 
-
 def identity(value):
     return value
-
 
 def yes_no(value):
     if value:
         return value.lower() == 'yes'
 
-
 def truthy(value):
     return bool(value)
-
 
 custom_fields = {
     'current_company': ('Xf4XTG8KD0', identity),
@@ -43,7 +38,6 @@ custom_fields = {
     'is_hiring': ('Xf4XTT5YRG', truthy),
     'is_mentor': ('Xf4XRMTE9H', yes_no),
 }
-
 
 def is_valid_user(user):
     restricted = user.get('is_restricted') or user.get('is_ultra_restricted')
@@ -78,7 +72,6 @@ def merged_profile(user, profile):
 def is_ok(result):
     return bool(result.get('ok'))
 
-
 if __name__ == '__main__':
     result = slack.api_call('users.list')
     if not is_ok(result):
@@ -100,7 +93,8 @@ if __name__ == '__main__':
         profiles.append(profile)
         sleep(1)
 
-    file_handle = open('profile_data.json', 'w')
+    file_path = path.abspath(path.join(sep, env['SLACKBOT_BASE_PATH'], 'profile_data.json'))
+    file_handle = open(file_path, 'w')
     if file_handle:
         file_handle.write(json.dumps(profiles))
         file_handle.close()

@@ -1,0 +1,13 @@
+[Unit]
+Description=CodePath Slack bot agent
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/slackbot/
+ExecStart=/var/www/slackbot/run.py
+StandardOutput=/var/www/slackbot/log/stdout.log
+StandardError=/var/www/slackbot/log/stderr.log
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
