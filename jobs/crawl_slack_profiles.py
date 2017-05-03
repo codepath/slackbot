@@ -8,6 +8,7 @@ from sys import exit
 from time import sleep
 
 from slackclient import SlackClient
+from models.user import User
 
 slack = SlackClient(env['SLACK_API_TOKEN'])
 
@@ -22,8 +23,7 @@ def identity(value):
     return value
 
 def yes_no(value):
-    if value:
-        return value.lower() == 'yes'
+    return value.lower() == 'yes' if value else False
 
 def truthy(value):
     return bool(value)
@@ -53,8 +53,8 @@ def merged_profile(user, profile):
         'slack_name': user['name'],
         'slack_id': user['id'],
         'email': profile.get('email'),
-        'last_updated_profile_at': str(datetime.fromtimestamp(user['updated'])),
-        'last_updated_record_at': str(datetime.now()),
+        'profile_updated_at': str(datetime.fromtimestamp(user['updated'])),
+        'updated_at': str(datetime.now()),
     }
 
     fields = profile.get('fields') or {}
@@ -63,8 +63,7 @@ def merged_profile(user, profile):
         field_id, transform = v
 
         data = fields.get(field_id)
-        if data:
-            result[key] = transform(data['value'])
+        result[key] = transform(data['value'] if data else None)
 
     return result
 
@@ -73,6 +72,7 @@ def is_ok(result):
     return bool(result.get('ok'))
 
 if __name__ == '__main__':
+
     result = slack.api_call('users.list')
     if not is_ok(result):
         fatal("failed to get list of users")
@@ -90,6 +90,7 @@ if __name__ == '__main__':
             continue
 
         profile = merged_profile(user, result['profile'])
+        User.insert_or_update(profile)
         profiles.append(profile)
         sleep(1)
 
