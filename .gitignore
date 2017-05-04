@@ -1,3 +1,4 @@
 env/
 *.pyc
 logs/*
+profile_data.json
