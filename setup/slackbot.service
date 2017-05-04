@@ -4,6 +4,7 @@ Description=CodePath Slack bot agent
 [Service]
 Type=simple
 WorkingDirectory=/var/www/slackbot/
+EnvironmentFile=/etc/environment
 ExecStart=/var/www/slackbot/run.py
 StandardOutput=/var/www/slackbot/logs/stdout.log
 StandardError=/var/www/slackbot/logs/stderr.log
