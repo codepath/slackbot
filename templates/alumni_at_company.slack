@@ -7,7 +7,7 @@ I found *{{ users | length }}* alumni from *{{ company }}*. {% if is_hiring %} T
 {% endfor %}
 
 {% if is_hiring %}
-To see who's hiring, just say: _whos hiring at {{ company }}_
+To see who is hiring, just say: _who is hiring at {{ company }}_
 {% endif %}
 
 {% else %}

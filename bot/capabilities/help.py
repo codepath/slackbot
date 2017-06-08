@@ -4,7 +4,7 @@ from bot.model import database
 from bot.utils import render_template
 
 
-@robot.hear(r"fred help|help")
+@robot.hear(r"(fred)? help")
 def help(res):
     if res.message.room.startswith('C') and not res.match.group(0).startswith('fred'):
         return
