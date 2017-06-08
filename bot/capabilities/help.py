@@ -4,8 +4,10 @@ from bot.model import database
 from bot.utils import render_template
 
 
-@robot.hear(r"help")
+@robot.hear(r"fred help|help")
 def help(res):
+    if res.message.room.startswith('C') and not res.match.group(0).startswith('fred'):
+        return
+
     response = render_template('help')
     res.send(response)
-

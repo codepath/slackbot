@@ -4,8 +4,11 @@ from bot.model import database
 from bot.utils import render_template
 
 
-@robot.hear(r"who'?s hiring(?: at (.*))?")
+@robot.hear(r"who is hiring(?: at (.*))?|fred who is hiring(?: at (.*))?")
 def list_hiring_companies(res):
+    if res.message.room.startswith('C') and not res.match.group(0).startswith('fred'):
+        return
+
     company_name = res.match.group(1)
 
     if company_name:
