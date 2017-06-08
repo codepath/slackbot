@@ -9,7 +9,6 @@ def list_hiring_companies(res):
     if res.message.room.startswith('C') and not res.match.group(0).startswith('fred'):
         return
 
-    res.match.groups()
     company_name = res.match.group(2)
 
     if company_name:
