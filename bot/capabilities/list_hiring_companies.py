@@ -1,12 +1,20 @@
+from os import environ as env
+
 from pybot import robot
 
 from bot.model import database
-from bot.utils import render_template
+from bot.utils import (
+    render_template,
+    DEVELOPMENT,
+    PRODUCTION,
+    SLACKBOT
+)
+MODE = PRODUCTION if env.get(PRODUCTION) else DEVELOPMENT
 
 
-@robot.hear(r"^(fred)? who is hiring(?: at (.*))?$")
+@robot.hear(r"^({})? who is hiring(?: at (.*))?$".format(SLACKBOT[MODE]))
 def list_hiring_companies(res):
-    if res.message.room.startswith('C') and not res.match.group(0).startswith('fred'):
+    if res.message.room.startswith('C') and not res.match.group(0).startswith('{}'.format(SLACKBOT[MODE])):
         return
 
     company_name = res.match.group(2)

@@ -6,10 +6,16 @@ from pybot import robot
 from pybot_slack import SlackAdapter
 
 from bot.capabilities import *
+from bot.utils import (
+    DEVELOPMENT,
+    PRODUCTION,
+    SLACKBOT_TOKENS
+)
 
 
 if __name__ == '__main__':
-    if env.get('PRODUCTION'):
-        robot.adapter = SlackAdapter(robot)
+    mode = PRODUCTION if env.get(PRODUCTION) else DEVELOPMENT
+    env['PYBOT_SLACK_TOKEN'] = SLACKBOT_TOKENS[mode]
 
+    robot.adapter = SlackAdapter(robot)
     robot.run()
