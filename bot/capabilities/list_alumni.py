@@ -9,13 +9,20 @@ from bot.utils import (
     PRODUCTION,
     SLACKBOT
 )
+from models.metric import Metric
+
 MODE = PRODUCTION if env.get(PRODUCTION) else DEVELOPMENT
 
 
 @robot.hear(r"^({})? alumni at (.*)$".format(SLACKBOT[MODE]))
 def list_alumni(res):
-    if res.message.room.startswith('C') and not res.match.group(0).startswith('{}'.format(SLACKBOT[MODE])):
+    if res.message.room.startswith('C') and not res.match.group(0).startswith(
+            '{}'.format(SLACKBOT[MODE])):
         return
+
+    if MODE == PRODUCTION:
+        # Log the message
+        Metric.insert(res.message)
 
     company_name = res.match.group(2)
     users = database.company_alumns(company_name, filter_hiring=False)
