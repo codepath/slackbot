@@ -2,8 +2,8 @@
 
 from os import environ as env
 
-from pybot import robot
-from pybot_slack import SlackAdapter
+from lib.pybot import robot
+from lib.pybot_slack import SlackAdapter
 
 from bot.capabilities import *
 
