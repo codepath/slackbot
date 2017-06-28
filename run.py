@@ -2,20 +2,16 @@
 
 from os import environ as env
 
-from lib.pybot import robot
+from lib.pybot.robot import Robot
 from lib.pybot_slack import SlackAdapter
 
 from bot.capabilities import *
-from bot.utils import (
-    DEVELOPMENT,
-    PRODUCTION,
-    SLACKBOT_TOKENS
-)
+from bot.model import database
 
 
 if __name__ == '__main__':
-    mode = PRODUCTION if env.get(PRODUCTION) else DEVELOPMENT
-    env['PYBOT_SLACK_TOKEN'] = SLACKBOT_TOKENS[mode]
+    robot = Robot(post_response_funcs=[database.bot_usage])
+    if env.get('PRODUCTION'):
+        robot.adapter = SlackAdapter(robot)
 
-    robot.adapter = SlackAdapter(robot)
     robot.run()

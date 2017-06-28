@@ -8,10 +8,11 @@ from .messages import Message
 
 
 class Robot(object):
-    def __init__(self, name='Pybot'):
+    def __init__(self, name='Pybot', post_response_funcs=None):
         self.name = name
         self._load_adapter()
         self._listeners = []
+        self._post_response_funcs = post_response_funcs or []
         self._bus = EventBus()
 
     def _load_adapter(self):
@@ -44,12 +45,14 @@ class Robot(object):
         self._bus.publish(type, data)
 
     def receive(self, message):
+        match = False
         for listener in self._listeners:
             try:
-                listener(message)
+                match = listener(message)
             except:
                 traceback.print_exc()
-
+        for func in self._post_response_funcs:
+            func(message, match)
 
     def respond(self, pattern):
         def wrapper(f):
