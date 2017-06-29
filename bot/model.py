@@ -1,8 +1,6 @@
 import json
 from pprint import pprint
 
-from models.metric import Metric
-
 
 class Model:
     def __init__(self):
@@ -31,9 +29,6 @@ class Model:
                 alumns.append(profile)
 
         return alumns if not filter_hiring else filter(lambda x: x['is_hiring'], alumns)
-
-    def bot_usage(self, message, match):
-        Metric.insert(message, match)
 
 
 database = Model()

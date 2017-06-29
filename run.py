@@ -6,11 +6,11 @@ from lib.pybot.robot import Robot
 from lib.pybot_slack import SlackAdapter
 
 from bot.capabilities import *
-from bot.model import database
+from models.metric import Metric
 
 
 if __name__ == '__main__':
-    robot = Robot(post_response_funcs=[database.bot_usage])
+    robot = Robot(post_response_funcs=[Metric.insert])
     if env.get('PRODUCTION'):
         robot.adapter = SlackAdapter(robot)
 

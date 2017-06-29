@@ -31,12 +31,13 @@ class Metric:
             'match': 't' if match else 'f'
         }
 
-        query = '''INSERT INTO %(table_name)s (%(keys)s) VALUES (%(format)s)'''\
-                % {
-                    'table_name': cls.TABLE_NAME,
-                    'keys': ", ".join(data.keys()),
-                    'format': ", ".join(['%s'] * len(data))
-                }
+        query = '''
+        INSERT INTO %(table_name)s (%(keys)s)
+        VALUES (%(format)s)
+        ''' % {'table_name': cls.TABLE_NAME,
+               'keys': ", ".join(data.keys()),
+               'format': ", ".join(['%s'] * len(data))
+              }
 
         conn = None
         cursor = None
