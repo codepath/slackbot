@@ -1,6 +1,7 @@
 import json
 from pprint import pprint
 
+
 class Model:
     def __init__(self):
         self.profiles = []
