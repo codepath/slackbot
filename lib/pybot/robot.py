@@ -52,8 +52,9 @@ class Robot(object):
         )
 
         if not any_match and self._catch_all_handler:
-            response = Response(self, message, None)
-            self._catch_all_handler(response)
+            if message.was_sent_to(self.name):
+                response = Response(self, message, None)
+                self._catch_all_handler(response)
 
         self.emit('processed', {
             'message': message,

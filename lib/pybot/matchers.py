@@ -21,15 +21,5 @@ class RobotNameMatcher(Matcher):
         self.robot = robot
 
     def match(self, message):
-        if not message.text:
-            return
-
-        tokens = message.text.lower().split(' ')
-        if not tokens:
-            return
-
-        name = self.robot.name.lower()
-        first_token = tokens[0].lstrip(' @').rstrip(' :-=')
-
-        if first_token == name:
+        if message.was_sent_to(self.robot.name):
             return self.wrapped.match(message)
