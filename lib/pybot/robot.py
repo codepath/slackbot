@@ -5,6 +5,7 @@ from .events import EventBus
 from .listener import Listener
 from .matchers import RegexMatcher, RobotNameMatcher
 from .messages import Message
+from .response import Response
 
 
 class Robot(object):
@@ -13,6 +14,7 @@ class Robot(object):
         self._load_adapter()
         self._listeners = []
         self._bus = EventBus()
+        self._catch_all_handler = None
 
     def _load_adapter(self):
         # TODO: dynamically load the adapter based on args
@@ -49,10 +51,22 @@ class Robot(object):
             for l in self._listeners
         )
 
+        if not any_match and self._catch_all_handler:
+            response = Response(self, message, None)
+            self._catch_all_handler(response)
+
         self.emit('processed', {
             'message': message,
             'was_match': any_match,
         })
+
+    def catch_all(self, f):
+        if self._catch_all_handler:
+            raise RuntimeError("Attempting to register more than one "
+                               "catch-all handler")
+
+        self._catch_all_handler = f
+        return f
 
     def respond(self, pattern):
         def wrapper(f):
