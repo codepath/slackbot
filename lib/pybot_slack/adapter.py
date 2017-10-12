@@ -58,9 +58,8 @@ class SlackAdapter(Adapter):
                 continue
 
             # Ignore any events sent by the bot
-            user_id = event.get('user')
-            user = self._find_user(user_id)
-            if user_id and user_id == self.bot_id:
+            user = self._user_from_event(event)
+            if user and user.id == self.bot_id:
                 continue
 
             message = None
@@ -84,6 +83,15 @@ class SlackAdapter(Adapter):
 
         # TODO: chat threads
         return Message(user, channel_id, text, ts)
+
+    def _user_from_event(self, event):
+        user = event.get('user')
+        if isinstance(user, dict):
+            # In certain events, the user value of the event
+            # will be the entire user instead of an ID.
+            user = user.get('id')
+
+        return self._find_user(user)
 
     def _send_message(self, channel_id, text):
         self.client.rtm_send_message(channel_id, text)
