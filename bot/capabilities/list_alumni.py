@@ -17,4 +17,4 @@ def list_alumni(res):
         is_hiring=is_hiring
     )
 
-    res.send(response)
+    res.reply(response)

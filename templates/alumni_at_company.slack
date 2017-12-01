@@ -1,13 +1,13 @@
 {% if users | length %}
 
-I found *{{ users | length }}* alumni from *{{ company }}*. {% if is_hiring %} They're hiring! {% endif %}
+I found *{{ users | length }}* alumni from *{{ company }}*.
 
 {% for user in users -%}
-    {{ loop.index }}. {{ user.first_name }} {{ user.last_name }} (<@{{ user.slack_id }}>)
+    {{ loop.index }}. {{ user.first_name }} {{ user.last_name }} (<@{{ user.slack_id }}>) -- {{ user.current_company }}
 {% endfor %}
 
 {% if is_hiring %}
-To see who is hiring, just say: _who is hiring at {{ company }}_
+They're hiring! To see who, just say: _who is hiring at {{ company }}_
 {% endif %}
 
 {% else %}

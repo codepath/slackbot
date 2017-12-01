@@ -23,5 +23,5 @@ class Adapter(object):
     def close(self):
         pass
 
-    def receive(self, text):
-        self.robot.receive(text)
+    def receive(self, message):
+        self.robot.receive(message)

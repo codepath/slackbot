@@ -4,7 +4,7 @@ from bot.model import database
 from bot.utils import render_template
 
 
-@robot.respond(r"who is hiring(?: at (.*))?")
+@robot.respond(r"(who is|who's|whos) hiring(?: at (.*))?")
 def list_hiring_companies(res):
     company_name = res.match.group(1)
 
@@ -15,4 +15,4 @@ def list_hiring_companies(res):
         companies = database.hiring_companies()
         response = render_template('whos_hiring', companies=companies)
 
-    res.send(response)
+    res.reply(response)

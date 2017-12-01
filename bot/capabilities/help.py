@@ -7,4 +7,4 @@ from bot.utils import render_template
 @robot.respond(r"(help|hi|hello)$")
 def help(res):
     response = render_template('help')
-    res.send(response)
+    res.reply(response)

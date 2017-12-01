@@ -1,5 +1,6 @@
 from os import environ as env
 from time import sleep
+import json
 
 from lib.pybot import robot, User, Message, Adapter
 from slackclient import SlackClient
@@ -18,12 +19,19 @@ class SlackAdapter(Adapter):
 
     def send(self, message, text):
         self._send_message(message.room, text)
-
+    
     def reply(self, message, text):
+        reply_room = None
         if not self._is_direct_message(message.room):
-            text = u'<@{}>: {}'.format(message.user.id, text)
+            # attempt to establish and get DM room
+            reply_room = self._get_user_dm_room(message.user)
+            if not reply_room:
+                room_message = u'<@{}>: {}'.format(message.user.id, "thanks for the message. Just sent you a DM with my response!")
+                self._send_message(message.room, room_message)
+            else:
+                reply_room = message.room
 
-        self._send_message(message.room, text)
+        self._send_message(reply_room, text)
 
     def run(self):
         if not self.client.rtm_connect():
@@ -67,14 +75,16 @@ class SlackAdapter(Adapter):
                 # TODO: implement other interesting subtypes
                 subtype = event.get('subtype') or 'message'
                 if subtype == 'message':
-                    message = self._adapt_message(user, event)
+                    message = self._adapt_message(user, event, event['text'])
+                # Handle the case when a message is edited by the user
+                elif subtype == 'message_changed':
+                    message = self._adapt_message(user, event, event['message']['text'])
 
             if message:
                 self.receive(message)
 
-    def _adapt_message(self, user, event):
+    def _adapt_message(self, user, event, text):
         channel_id = event['channel']
-        text = event['text']
         ts = event['ts']
 
         if self._is_direct_message(channel_id):
@@ -102,3 +112,12 @@ class SlackAdapter(Adapter):
     @staticmethod
     def _is_direct_message(channel_id):
         return (channel_id or '').startswith('D')
+
+    def _get_user_dm_room(self, user):
+        response = self.client.api_call("im.open", user=user, return_im="true")
+        if response:
+            json_response = json.loads(response)
+            if json_response['ok']:
+                return json_response["channel"]["id"]
+
+        return None
