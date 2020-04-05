@@ -1,9 +1,10 @@
-from lib.pybot import Adapter
-from lib.pybot import Message
 from os import environ as env
 from time import sleep
 
 from slackclient import SlackClient
+
+from lib.pybot import Adapter
+from lib.pybot import Message
 
 
 class SlackAdapter(Adapter):

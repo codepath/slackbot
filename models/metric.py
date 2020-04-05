@@ -29,17 +29,14 @@ class Metric:
             "match": "t" if match else "f",
         }
 
-        query = """
-        INSERT INTO %(table_name)s (%(keys)s)
-        VALUES (%(format)s)
-        """ % {
-            "table_name": cls.TABLE_NAME,
-            "keys": ", ".join(data.keys()),
-            "format": ", ".join(["%s"] * len(data)),
-        }
+        table_name = (cls.TABLE_NAME,)
+        keys = ", ".join(data.keys())
+        values = ", ".join(["%s"] * len(data))
 
         conn = None
         cursor = None
+        query = f"INSERT INTO {table_name} ({keys}) VALUES ({values})"
+
         try:
             conn = Database.connect()
             cursor = conn.cursor()

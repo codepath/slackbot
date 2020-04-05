@@ -1,9 +1,9 @@
 #!/usr/bin/python
-from lib.pybot import robot
-from lib.pybot_slack import SlackAdapter
 from os import environ as env
 
 from bot.capabilities import *  # noqa:F403,F401
+from lib.pybot import robot
+from lib.pybot_slack import SlackAdapter
 from models.metric import Metric
 
 
