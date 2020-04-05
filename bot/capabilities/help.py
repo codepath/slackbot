@@ -1,6 +1,5 @@
 from lib.pybot import robot
 
-from bot.model import database
 from bot.utils import render_template
 
 

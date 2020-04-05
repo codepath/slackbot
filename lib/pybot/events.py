@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-class EventBus(object):
+class EventBus:
     def __init__(self):
         self._listeners = defaultdict(list)
 

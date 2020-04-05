@@ -11,7 +11,7 @@ def list_alumni(res):
     is_hiring = any(u["is_hiring"] for u in users)
 
     response = render_template(
-        "alumni_at_company", company=company_name, users=users, is_hiring=is_hiring
+        "alumni_at_company", company=company_name, users=users, is_hiring=is_hiring,
     )
 
     res.reply(response)

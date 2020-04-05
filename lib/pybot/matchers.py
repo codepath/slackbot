@@ -1,7 +1,7 @@
 import re
 
 
-class Matcher(object):
+class Matcher:
     def match(self, message):
         pass
 

@@ -1,13 +1,14 @@
+from lib.pybot import Adapter
+from lib.pybot import Message
 from os import environ as env
 from time import sleep
 
-from lib.pybot import robot, User, Message, Adapter
 from slackclient import SlackClient
 
 
 class SlackAdapter(Adapter):
     def __init__(self, robot):
-        super(SlackAdapter, self).__init__(robot)
+        super().__init__(robot)
 
         token = env.get("PYBOT_SLACK_TOKEN")
         if not token:
@@ -22,7 +23,7 @@ class SlackAdapter(Adapter):
     def reply(self, message, text):
         thread = None
         if not self._is_direct_message(message.room):
-            text = u"<@{}>: {}".format(message.user.id, text)
+            text = f"<@{message.user.id}>: {text}"
             thread = message.thread_id
 
         self._send_message(message.room, text, thread)
@@ -30,7 +31,7 @@ class SlackAdapter(Adapter):
     def run(self):
         if not self.client.rtm_connect():
             # TODO: use logger once implemented
-            print "error: unable to connect to RTM service"
+            print("error: unable to connect to RTM service")
             return
 
         self._initialize()
@@ -82,7 +83,7 @@ class SlackAdapter(Adapter):
 
         if self._is_direct_message(channel_id):
             # Pretend they mentioned the robot's name
-            text = u"{} {}".format(self.robot.name, text)
+            text = f"{self.robot.name} {text}"
 
         # TODO: chat threads
         return Message(user, channel_id, text, ts, thread_ts)

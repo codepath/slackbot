@@ -1,4 +1,4 @@
-class Adapter(object):
+class Adapter:
     def __init__(self, robot):
         self.robot = robot
 

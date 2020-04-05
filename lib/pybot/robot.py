@@ -3,13 +3,14 @@ import traceback
 from .adapters import ShellAdapter
 from .events import EventBus
 from .listener import Listener
-from .matchers import RegexMatcher, RobotNameMatcher
+from .matchers import RegexMatcher
+from .matchers import RobotNameMatcher
 from .messages import Message
 from .response import Response
 
 
-class Robot(object):
-    def __init__(self, name='Pybot'):
+class Robot:
+    def __init__(self, name="Pybot"):
         self.name = name
         self._load_adapter()
         self._listeners = []
@@ -46,25 +47,22 @@ class Robot(object):
         self._bus.publish(type, data)
 
     def receive(self, message):
-        any_match = any(
-            self._call_listener(l, message)
-            for l in self._listeners
-        )
+        any_match = any(self._call_listener(l, message) for l in self._listeners)
 
         if not any_match and self._catch_all_handler:
             if message.was_sent_to(self.name):
                 response = Response(self, message, None)
                 self._catch_all_handler(response)
 
-        self.emit('processed', {
-            'message': message,
-            'was_match': any_match,
-        })
+        self.emit(
+            "processed", {"message": message, "was_match": any_match},
+        )
 
     def catch_all(self, f):
         if self._catch_all_handler:
-            raise RuntimeError("Attempting to register more than one "
-                               "catch-all handler")
+            raise RuntimeError(
+                "Attempting to register more than one catch-all handler",
+            )
 
         self._catch_all_handler = f
         return f
@@ -99,5 +97,5 @@ class Robot(object):
     def _call_listener(self, listener, message):
         try:
             return listener(message)
-        except:
+        except Exception:
             traceback.print_exc()

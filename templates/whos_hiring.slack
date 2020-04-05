@@ -1,6 +1,6 @@
 I found *{{ companies | length }}* companies hiring CodePath alumni.
 
-{% for company, positions in companies.iteritems() -%}
+{% for company, positions in companies.items() -%}
     {{ loop.index }}. {{ company }} - {{ ', '.join(positions) }}
 {% endfor %}
 
