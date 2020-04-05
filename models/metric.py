@@ -29,7 +29,7 @@ class Metric:
             "match": "t" if match else "f",
         }
 
-        table_name = (cls.TABLE_NAME,)
+        table_name = cls.TABLE_NAME
         keys = ", ".join(data.keys())
         values = ", ".join(["%s"] * len(data))
 
@@ -40,7 +40,7 @@ class Metric:
         try:
             conn = Database.connect()
             cursor = conn.cursor()
-            cursor.execute(query, data.values())
+            cursor.execute(query, list(data.values()))
         except Exception as e:
             # TODO: Change print to logger
             print(e)

@@ -28,7 +28,7 @@ class User:
         try:
             conn = Database.connect()
             cursor = conn.cursor()
-            cursor.execute(query, info.values())
+            cursor.execute(query, list(info.values()))
         except Exception as e:
             # TODO: Change print to logger
             print(e)
