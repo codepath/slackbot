@@ -23,7 +23,7 @@ class SlackAdapter(Adapter):
         thread = None
         if not self._is_direct_message(message.room):
             text = u"<@{}>: {}".format(message.user.id, text)
-            thread = message.id
+            thread = message.thread_id
 
         self._send_message(message.room, text, thread)
 
@@ -78,13 +78,14 @@ class SlackAdapter(Adapter):
         channel_id = event["channel"]
         text = event["text"]
         ts = event["ts"]
+        thread_ts = event.get("thread_ts", ts)
 
         if self._is_direct_message(channel_id):
             # Pretend they mentioned the robot's name
             text = u"{} {}".format(self.robot.name, text)
 
         # TODO: chat threads
-        return Message(user, channel_id, text, ts)
+        return Message(user, channel_id, text, ts, thread_ts)
 
     def _user_from_event(self, event):
         user = event.get("user")
