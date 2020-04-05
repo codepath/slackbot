@@ -1,4 +1,4 @@
-class Message(object):
+class Message:
     def __init__(self, user, room, text, id=None, thread_id=None):
         self.user = user
         self.room = room

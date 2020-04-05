@@ -1,7 +1,5 @@
-from lib.pybot import robot
-
-from bot.model import database
 from bot.utils import render_template
+from lib.pybot import robot
 
 
 @robot.respond(r"(help|hi|hello)$")

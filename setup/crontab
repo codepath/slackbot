@@ -1,2 +1,2 @@
 # cron job to update user profile data every hour
-0 * * * * root /var/www/slackbot/jobs/crawl_slack_profiles.py > /var/www/slackbot/logs/cron.log
+0 * * * * root run-one /var/www/slackbot/jobs/crawl_slack_profiles.py > /var/www/slackbot/logs/cron.log

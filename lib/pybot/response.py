@@ -1,4 +1,4 @@
-class Response(object):
+class Response:
     def __init__(self, robot, message, match):
         self.robot = robot
         self.message = message

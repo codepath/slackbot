@@ -1,7 +1,7 @@
 from .response import Response
 
 
-class Listener(object):
+class Listener:
     def __init__(self, robot, matcher, func):
         self.robot = robot
         self.matcher = matcher
