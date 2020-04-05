@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# A poor man's deploy script. This is meant to be run on the box
+# where the bot is running, which is currently bots.codepath.com
+
+echo "Fetching latest master"
+git fetch origin
+git reset --hard origin/master
+
+echo "Installing service definition"
+cp setup/slackbot.service /etc/systemd/system/slackbot.service
+
+echo "Installing crontab..."
+crontab setup/crontab
+
+echo "Restarting service"
+service slackbot restart
+
+echo "Done! Deployed SHA: `git rev-parse HEAD`"
