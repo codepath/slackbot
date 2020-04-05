@@ -9,6 +9,7 @@ git reset --hard origin/master
 
 echo "Installing service definition"
 cp setup/slackbot.service /etc/systemd/system/slackbot.service
+systemctl daemon-reload
 
 echo "Installing crontab..."
 crontab setup/crontab
