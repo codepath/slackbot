@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 from os import environ as env
 
 from bot.capabilities import *  # noqa:F403,F401
