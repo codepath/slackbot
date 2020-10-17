@@ -1,9 +1,11 @@
+from .middleware import channel_response_deprecated
 from bot.model import database
 from bot.utils import render_template
 from lib.pybot import robot
 
 
 @robot.respond(r"who is hiring(?: at (.*))?")
+@channel_response_deprecated
 def list_hiring_companies(res):
     company_name = res.match.group(1)
 

@@ -81,13 +81,21 @@ class SlackAdapter(Adapter):
         text = event["text"]
         ts = event["ts"]
         thread_ts = event.get("thread_ts", ts)
+        is_direct_message = self._is_direct_message(channel_id)
 
-        if self._is_direct_message(channel_id):
+        if is_direct_message:
             # Pretend they mentioned the robot's name
             text = f"{self.robot.name} {text}"
 
         # TODO: chat threads
-        return Message(user, channel_id, text, ts, thread_ts)
+        return Message(
+            user=user,
+            room=channel_id,
+            text=text,
+            id=ts,
+            thread_id=thread_ts,
+            is_direct_message=is_direct_message,
+        )
 
     def _user_from_event(self, event):
         user = event.get("user")

@@ -1,9 +1,11 @@
+from .middleware import channel_response_deprecated
 from bot.model import database
 from bot.utils import render_template
 from lib.pybot import robot
 
 
 @robot.respond(r"alumni at (.*)")
+@channel_response_deprecated
 def list_alumni(res):
     company_name = res.match.group(1)
     users = database.company_alumns(company_name, filter_hiring=False)
